@@ -1,0 +1,12 @@
+# Assets Directory
+
+This directory contains diagrams, images, and other visual assets for the documentation.
+
+## Structure
+
+- `architecture-diagrams/` - System architecture diagrams
+- `component-diagrams/` - Component relationship diagrams  
+- `data-flow-diagrams/` - Data flow and process diagrams
+- `api-diagrams/` - API interaction flow diagrams
+- `user-journey-diagrams/` - User workflow and journey diagrams
+- `images/` - Screenshots and other images
