@@ -1,0 +1,123 @@
+{
+  "save_canvas_examples": {
+    "ejemplo_basico": {
+      "user_id": 1,
+      "title": "Pizarra Básica",
+      "canvas_data": {
+        "version": "1.0",
+        "timestamp": "2025-01-08T10:30:00Z",
+        "canvas": {
+          "width": 800,
+          "height": 600,
+          "background": "#ffffff"
+        },
+        "elements": [
+          {
+            "type": "stroke",
+            "id": "stroke_1",
+            "tool": "pen",
+            "color": "#000000",
+            "width": 2,
+            "points": [
+              {"x": 100, "y": 150, "pressure": 0.5},
+              {"x": 102, "y": 152, "pressure": 0.6},
+              {"x": 105, "y": 155, "pressure": 0.7}
+            ],
+            "timestamp": "2025-01-08T10:30:01Z"
+          }
+        ]
+      }
+    },
+    "ejemplo_complejo": {
+      "user_id": 1,
+      "title": "Algoritmo de Ordenamiento",
+      "canvas_data": {
+        "version": "1.0",
+        "timestamp": "2025-01-08T11:00:00Z",
+        "canvas": {
+          "width": 1024,
+          "height": 768,
+          "background": "#f8f9fa"
+        },
+        "elements": [
+          {
+            "type": "stroke",
+            "id": "stroke_1",
+            "tool": "pen",
+            "color": "#007AFF",
+            "width": 3,
+            "points": [
+              {"x": 50, "y": 100, "pressure": 0.8},
+              {"x": 150, "y": 100, "pressure": 0.8},
+              {"x": 150, "y": 200, "pressure": 0.8},
+              {"x": 50, "y": 200, "pressure": 0.8},
+              {"x": 50, "y": 100, "pressure": 0.8}
+            ],
+            "timestamp": "2025-01-08T11:00:01Z"
+          },
+          {
+            "type": "text",
+            "id": "text_1",
+            "content": "Bubble Sort",
+            "position": {"x": 75, "y": 120},
+            "font": {
+              "family": "Arial",
+              "size": 16,
+              "color": "#333333"
+            },
+            "timestamp": "2025-01-08T11:00:05Z"
+          },
+          {
+            "type": "stroke",
+            "id": "stroke_2",
+            "tool": "highlighter",
+            "color": "#FFFF00",
+            "width": 8,
+            "opacity": 0.5,
+            "points": [
+              {"x": 200, "y": 150, "pressure": 0.3},
+              {"x": 300, "y": 150, "pressure": 0.3}
+            ],
+            "timestamp": "2025-01-08T11:00:10Z"
+          }
+        ],
+        "ai_interactions": [
+          {
+            "id": "chat_1",
+            "user_message": "¿Cómo optimizar este algoritmo?",
+            "ai_response": "Puedes usar QuickSort para mejor rendimiento...",
+            "timestamp": "2025-01-08T11:05:00Z"
+          }
+        ]
+      }
+    },
+    "ejemplo_minimo": {
+      "user_id": 1,
+      "canvas_data": {
+        "version": "1.0",
+        "elements": []
+      }
+    }
+  },
+  "load_canvas_examples": {
+    "url_basica": "http://localhost/sl8-backend/load_canvas.php?id=1",
+    "url_con_id_2": "http://localhost/sl8-backend/load_canvas.php?id=2",
+    "url_error_404": "http://localhost/sl8-backend/load_canvas.php?id=999"
+  },
+  "casos_de_error": {
+    "save_sin_user_id": {
+      "title": "Pizarra sin usuario",
+      "canvas_data": {"elements": []}
+    },
+    "save_user_id_invalido": {
+      "user_id": "abc",
+      "canvas_data": {"elements": []}
+    },
+    "save_json_invalido": {
+      "user_id": 1,
+      "canvas_data": "esto no es json válido"
+    },
+    "load_id_invalido": "http://localhost/sl8-backend/load_canvas.php?id=abc",
+    "load_sin_id": "http://localhost/sl8-backend/load_canvas.php"
+  }
+}
