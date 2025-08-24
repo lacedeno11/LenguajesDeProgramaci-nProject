@@ -3,23 +3,15 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
-import Canvas from './src/components/Canvas';
-import Toolbar from './src/components/Toolbar';
-
-function WhiteboardApp() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Toolbar />
-      <Canvas />
-      <StatusBar style="auto" />
-    </SafeAreaView>
-  );
-}
+import RootNavigator from './src/navigation/RootNavigator';
 
 export default function App() {
   return (
     <Provider store={store}>
-      <WhiteboardApp />
+      <SafeAreaView style={styles.container}>
+        <RootNavigator />
+        <StatusBar style="auto" />
+      </SafeAreaView>
     </Provider>
   );
 }

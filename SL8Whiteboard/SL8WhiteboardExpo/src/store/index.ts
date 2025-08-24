@@ -5,6 +5,8 @@ import toolsSlice from './slices/toolsSlice';
 import layersSlice from './slices/layersSlice';
 import historySlice from './slices/historySlice';
 import uiSlice from './slices/uiSlice';
+import authSlice from './slices/authSlice';
+import sessionsSlice from './slices/sessionsSlice';
 
 // Combine all reducers
 const rootReducer = combineReducers({
@@ -13,6 +15,8 @@ const rootReducer = combineReducers({
   layers: layersSlice,
   history: historySlice,
   ui: uiSlice,
+  auth: authSlice,
+  sessions: sessionsSlice,
 });
 
 // Configure store with proper middleware and DevTools
@@ -27,6 +31,12 @@ export const store = configureStore({
           'persist/REHYDRATE',
           'canvas/addStroke',
           'canvas/updateStroke',
+          'auth/login/pending',
+          'auth/login/fulfilled',
+          'auth/register/pending',
+          'auth/register/fulfilled',
+          'sessions/saveSession/pending',
+          'sessions/saveSession/fulfilled',
         ],
         // Ignore these field paths in all actions
         ignoredActionsPaths: ['meta.arg', 'payload.timestamp'],
@@ -47,19 +57,19 @@ export const store = configureStore({
     name: 'SL8 Whiteboard',
     trace: true,
     traceLimit: 25,
-    actionSanitizer: (action) => ({
+    actionSanitizer: (action: any) => ({
       ...action,
       // Sanitize large payloads for better DevTools performance
       payload: action.type.includes('Stroke') && action.payload?.points?.length > 10
         ? { ...action.payload, points: `[${action.payload.points.length} points]` }
         : action.payload,
     }),
-    stateSanitizer: (state) => ({
+    stateSanitizer: (state: any) => ({
       ...state,
       // Sanitize large state objects for better DevTools performance
       canvas: {
         ...state.canvas,
-        strokes: `${Object.keys(state.canvas.strokes).length} strokes`,
+        strokes: `${Object.keys(state.canvas?.strokes || {}).length} strokes`,
       },
     }),
   },

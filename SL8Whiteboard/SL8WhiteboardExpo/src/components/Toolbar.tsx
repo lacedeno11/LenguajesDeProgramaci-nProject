@@ -1,17 +1,50 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../store';
 import { setZoom, resetView, clearCanvas } from '../store/slices/canvasSlice';
 import { setCurrentTool, setToolColor, setToolWidth } from '../store/slices/toolsSlice';
+import { logoutAsync } from '../store/slices/authSlice';
 import { useHistory } from '../hooks/useHistory';
 import ImagePickerButton from './ImagePickerButton';
 import CameraButton from './CameraButton';
 
-const Toolbar: React.FC = () => {
+interface ToolbarProps {
+  onShowSessions?: () => void;
+  onSaveSession?: () => void;
+  userEmail?: string;
+  sessionsCount?: number;
+  maxSessions?: number;
+}
+
+const Toolbar: React.FC<ToolbarProps> = ({
+  onShowSessions,
+  onSaveSession,
+  userEmail,
+  sessionsCount = 0,
+  maxSessions = 5,
+}) => {
   const dispatch = useAppDispatch();
   const canvasState = useAppSelector(state => state.canvas);
   const toolsState = useAppSelector(state => state.tools);
   const { undo, redo, canUndo, canRedo } = useHistory();
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Cerrar Sesión',
+      '¿Estás seguro de que quieres cerrar sesión?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Cerrar Sesión',
+          style: 'destructive',
+          onPress: () => dispatch(logoutAsync()),
+        },
+      ]
+    );
+  };
 
   const handleZoomIn = () => {
     dispatch(setZoom(Math.min(4.0, canvasState.zoom + 0.25)));
@@ -146,6 +179,45 @@ const Toolbar: React.FC = () => {
       </View>
 
       <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Sesiones</Text>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity 
+            style={[styles.button, styles.saveButton]} 
+            onPress={onSaveSession}
+            disabled={!onSaveSession}
+          >
+            <Text style={styles.buttonText}>💾 Guardar</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.button, styles.loadButton]} 
+            onPress={onShowSessions}
+            disabled={!onShowSessions}
+          >
+            <Text style={styles.buttonText}>📂 Cargar ({sessionsCount}/{maxSessions})</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Usuario</Text>
+        <View style={styles.buttonRow}>
+          <View style={styles.userInfo}>
+            <Text style={styles.userEmail} numberOfLines={1}>
+              {userEmail || 'Usuario'}
+            </Text>
+          </View>
+          
+          <TouchableOpacity 
+            style={[styles.button, styles.logoutButton]} 
+            onPress={handleLogout}
+          >
+            <Text style={styles.buttonText}>🚪 Salir</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>Images</Text>
         <View style={styles.buttonRow}>
           <TouchableOpacity 
@@ -272,6 +344,28 @@ const styles = StyleSheet.create({
   },
   imageButton: {
     backgroundColor: '#28a745',
+  },
+  saveButton: {
+    backgroundColor: '#17a2b8',
+  },
+  loadButton: {
+    backgroundColor: '#6f42c1',
+  },
+  logoutButton: {
+    backgroundColor: '#dc3545',
+  },
+  userInfo: {
+    backgroundColor: '#e9ecef',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 6,
+    flex: 1,
+    marginRight: 8,
+  },
+  userEmail: {
+    fontSize: 12,
+    color: '#495057',
+    fontWeight: '500',
   },
 });
 

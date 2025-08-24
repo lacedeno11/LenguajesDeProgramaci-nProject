@@ -105,6 +105,35 @@ const canvasSlice = createSlice({
       state.imageElements = {};
       state.selectedImageId = null;
     },
+
+    loadCanvasState: (state, action: PayloadAction<{
+      strokes?: any[];
+      images?: any[];
+    }>) => {
+      // Clear current state
+      state.strokes = {};
+      state.textElements = {};
+      state.imageElements = {};
+      state.selectedImageId = null;
+
+      // Load strokes
+      if (action.payload.strokes) {
+        action.payload.strokes.forEach((stroke: any) => {
+          if (stroke.id) {
+            state.strokes[stroke.id] = stroke;
+          }
+        });
+      }
+
+      // Load images
+      if (action.payload.images) {
+        action.payload.images.forEach((image: any) => {
+          if (image.id) {
+            state.imageElements[image.id] = image;
+          }
+        });
+      }
+    },
     
     selectImageElement: (state, action: PayloadAction<string>) => {
       state.selectedImageId = action.payload;
@@ -132,6 +161,7 @@ export const {
   updateImageElement,
   removeImageElement,
   clearCanvas,
+  loadCanvasState,
   selectImageElement,
   deselectAllImages,
 } = canvasSlice.actions;
