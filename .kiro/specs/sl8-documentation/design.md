@@ -1,261 +1,183 @@
-# Design Document
+# Plan de Implementación SL8.ai
 
-## Overview
+## Análisis del Sistema Actual
 
-La documentación técnica de SL8.ai será un sistema completo de documentación que abarca desde el resumen ejecutivo hasta las guías técnicas detalladas. El diseño se estructura en 8 secciones principales que proporcionan información clara y accesible tanto para desarrolladores como para stakeholders del proyecto.
+### Frontend React Native/Expo - COMPLETO ✅
+**Ubicación:** `SL8Whiteboard/SL8WhiteboardExpo/`
 
-La documentación seguirá un enfoque modular y jerárquico, permitiendo a los usuarios navegar desde información general hasta detalles técnicos específicos. Se utilizará Markdown como formato principal para garantizar compatibilidad y facilidad de mantenimiento.
+**Canvas System:**
+- **Component**: `src/components/Canvas.tsx` - Sistema de dibujo completo con React Native SVG
+- **Touch Handling**: Gestos multi-touch (pan, zoom, dibujo) implementados
+- **Rendering**: SVG rendering de strokes, texto e imágenes
 
-## Architecture
-
-### Documentation Structure
-
-La documentación se organizará en los siguientes archivos principales:
-
-```
-docs/
-├── README.md                    # Resumen Ejecutivo
-├── ARCHITECTURE.md              # Arquitectura del Sistema
-├── INSTALLATION.md              # Guía de Instalación y Setup
-├── API.md                       # Documentación de API
-├── DEVELOPMENT.md               # Guía de Desarrollo
-├── ROADMAP.md                   # Roadmap de Funcionalidades
-├── USE_CASES.md                 # Casos de Uso
-├── TECHNICAL_DECISIONS.md       # Consideraciones Técnicas
-└── assets/                      # Diagramas e imágenes
-    ├── architecture-diagram.md
-    ├── component-diagram.md
-    ├── data-flow-diagram.md
-    └── api-flow-diagram.md
-```
-
-### Content Organization Strategy
-
-1. **Información Progresiva**: Cada documento comienza con información general y progresa hacia detalles técnicos específicos.
-2. **Referencias Cruzadas**: Enlaces entre documentos para facilitar la navegación.
-3. **Ejemplos Prácticos**: Código de ejemplo y casos de uso reales en cada sección técnica.
-4. **Diagramas Visuales**: Uso de Mermaid para diagramas de arquitectura y flujo de datos.
-## Components and Interfaces
-
-### 1. Executive Summary Component (README.md)
-
-**Propósito**: Proporcionar una visión general clara y concisa del proyecto.
-
-**Estructura**:
-- Descripción del proyecto y valor único.
-- Logros destacados (Ecuador Tech Week 2025 Hackathon).
-- Objetivos principales y público objetivo.
-- Estado actual del desarrollo.
-- Enlaces rápidos a documentación específica.
-
-**Interfaz**: Markdown estándar con badges de estado y enlaces de navegación rápida.
-
-### 2. System Architecture Component (ARCHITECTURE.md)
-
-**Propósito**: Documentar la arquitectura técnica completa del sistema.
-
-**Estructura**:
-- Arquitectura Frontend (React Native/Expo)
-  - Estructura de componentes.
-  - Gestión de estado con Redux Toolkit.
-  - Sistema de herramientas de dibujo.
-- Arquitectura Backend (PHP + MySQL).
-  - Estructura de base de datos.
-  - API RESTful endpoints.
-  - Sistema de autenticación.
-- Integración con IA (Gemini 2.5)
-  - Flujo de análisis de contenido.
-  - Sistema de pistas contextuales.
-
-**Interfaz**: Diagramas Mermaid + descripciones técnicas detalladas
-
-### 3. Installation Guide Component (INSTALLATION.md)
-
-**Propósito**: Guía paso a paso para configurar el entorno de desarrollo
-
-**Estructura**:
-- Prerrequisitos del sistema
-- Configuración del Frontend
-  - Instalación de Node.js y Expo CLI
-  - Clonado del repositorio
-  - Instalación de dependencias
-  - Configuración del entorno
-- Configuración del Backend
-  - Instalación de PHP y MySQL
-  - Configuración de base de datos
-  - Variables de entorno
-- Verificación de la instalación
-
-**Interfaz**: Comandos de terminal con explicaciones y pasos de verificación
-
-### 4. API Documentation Component (API.md)
-
-**Propósito**: Documentar todos los endpoints de la API REST
-
-**Estructura**:
-- Autenticación
-  - POST /api/auth/register
-  - POST /api/auth/login
-  - POST /api/auth/logout
-- Gestión de Sesiones
-  - GET /api/sessions
-  - POST /api/sessions
-  - PUT /api/sessions/:id
-  - DELETE /api/sessions/:id
-- Integración con IA
-  - POST /api/ai/analyze
-  - POST /api/ai/hint
-- Formato de datos JSON
-- Códigos de estado y manejo de errores
-
-**Interfaz**: Especificación OpenAPI-style con ejemplos de request/response
-
-### 5. Development Guide Component (DEVELOPMENT.md)
-
-**Propósito**: Guía para contribuidores y desarrolladores
-
-**Estructura**:
-- Estructura del proyecto y organización del código.
-- Convenciones de código y estándares.
-- Flujo de trabajo con Git.
-- Cómo agregar nuevas herramientas de dibujo.
-- Sistema de testing y debugging.
-- Proceso de contribución.
-
-**Interfaz**: Guías paso a paso con ejemplos de código
-
-### 6. Roadmap Component (ROADMAP.md)
-
-**Propósito**: Planificación y estado de funcionalidades
-
-**Estructura**:
-- Funcionalidades Completadas ✅
-- Funcionalidades en Desarrollo 🔄
-- Funcionalidades Planificadas ⏳
-- Funcionalidades Futuras 🚀
-- Dependencias y prioridades
-
-**Interfaz**: Tabla de estado con fechas estimadas y descripciones
-
-### 7. Use Cases Component (USE_CASES.md)
-
-**Propósito**: Documentar escenarios de uso principales
-
-**Estructura**:
-- Flujo de trabajo del estudiante.
-- Sistema de ayuda por niveles.
-- Interacción con IA paso a paso.
-- Persistencia y recuperación de sesiones.
-- Manejo de errores y excepciones.
-
-**Interfaz**: Diagramas de flujo + descripciones narrativas
-
-### 8. Technical Decisions Component (TECHNICAL_DECISIONS.md)
-
-**Propósito**: Justificar decisiones arquitectónicas y tecnológicas
-
-**Estructura**:
-- Elección de React Native/Expo.
-- Redux Toolkit para gestión de estado.
-- PHP + MySQL para backend.
-- Integración con Gemini 2.5.
-- Trade-offs y alternativas consideradas.
-- Consideraciones de escalabilidad.
-
-**Interfaz**: Formato de ADR (Architecture Decision Records)
-
-## Data Models
-
-### Documentation Metadata
-
+**Redux Store - 5 Slices Implementados:**
 ```typescript
-interface DocumentationSection {
-  id: string;
-  title: string;
-  description: string;
-  lastUpdated: Date;
-  version: string;
-  dependencies: string[];
-  tags: string[];
+// src/store/slices/
+canvasSlice.ts    // Canvas state: strokes, textElements, imageElements, zoom, pan
+toolsSlice.ts     // Tools: currentTool, settings, colorPalette, toolHistory  
+layersSlice.ts    // Layer management: layers, visibility, ordering
+historySlice.ts   // Undo/redo: entries, currentIndex con history stack
+uiSlice.ts        // UI state: loading, error, modals
+```
+
+**Drawing Tools - Patrón Strategy:**
+```typescript
+// src/tools/
+BaseTool.ts       // Abstract base class
+PenTool.ts        // Smooth vector drawing 
+PencilTool.ts     // Textured drawing with natural feel
+HighlighterTool.ts // Semi-transparent highlighting
+EraserTool.ts     // Smart stroke splitting eraser
+TextTool.ts       // Direct text annotation
+```
+
+**State Structure (Real):**
+```typescript
+interface CanvasState {
+  size: CanvasSize;                          // Canvas dimensions (4x screen)
+  zoom: number;                              // 0.25x - 4.0x zoom
+  panOffset: { x: number; y: number };       // Pan position
+  strokes: Record<string, Stroke>;           // All drawing strokes by ID
+  textElements: Record<string, TextElement>; // Text annotations by ID
+  imageElements: Record<string, ImageElement>; // Images by ID
+  selectedImageId: string | null;            // Currently selected image
 }
 ```
 
-### Code Example Structure
+### Backend PHP + MySQL - PARCIALMENTE IMPLEMENTADO ⚠️
+**Ubicación:** `sl8-backend/`
 
-```typescript
-interface CodeExample {
-  language: string;
-  code: string;
-  description: string;
-  filename?: string;
-  lineNumbers?: boolean;
-}
+**Implementado por Luis:**
+- ✅ `config.php` - DB connection, CORS, helper functions
+- ✅ `save_canvas.php` - POST endpoint para guardar pizarra
+- ✅ `load_canvas.php` - GET endpoint para cargar pizarra  
+- ✅ `database.sql` - Schema: users, canvas_sessions tables
+- ⚠️ `Backend/login.php`, `Backend/register.php` - Auth básico pero diferente DB
+
+**Estructura DB Actual:**
+```sql
+users: id, email, password_hash, created_at
+canvas_sessions: id, user_id, title, canvas_data(LONGTEXT), created_at, updated_at
 ```
 
-### Diagram Definition
+**PROBLEMA IDENTIFICADO:** Dos sistemas de auth con diferentes DBs:
+- `sl8-backend/` usa DB `sl8_whiteboard` 
+- `Backend/` usa DB `user_auth`
 
-```typescript
-interface DiagramDefinition {
-  type: 'mermaid' | 'plantuml' | 'image';
-  content: string;
-  caption: string;
-  alt: string;
-}
-```
+## Plan de Implementación - 1 Día (3-4 Personas)
 
-## Error Handling
+### **DIVISIÓN DE TAREAS**
 
-### Documentation Consistency
+#### **👨‍💻 Persona 1: Backend Integration Lead (3-4 horas)**
 
-- **Validation**: Verificar que todos los enlaces internos funcionen correctamente
-- **Versioning**: Mantener consistencia entre versiones de código y documentación
-- **Completeness**: Asegurar que todos los componentes del sistema estén documentados
+**🔧 Tarea 1A: Unificar y Completar API REST (2 horas)**
+- **Objetivo**: Unificar autenticación y completar CRUD de pizarras
+- **Archivos a Crear/Modificar**:
+  ```
+  sl8-backend/
+  ├── api/
+  │   ├── auth.php          # Unificar login/register 
+  │   ├── sessions.php      # CRUD pizarras (GET, PUT, DELETE)
+  │   └── index.php         # Router principal
+  ├── config.php            # Mejorar configuración
+  └── database.sql          # Actualizar schema
+  ```
 
-### Content Quality Assurance
+**🔗 Tarea 1B: Service Layer Frontend (1-2 horas)**
+- **Objetivo**: Conectar frontend con backend
+- **Archivos a Crear**:
+  ```
+  SL8WhiteboardExpo/src/
+  ├── services/
+  │   ├── ApiService.ts     # HTTP client base
+  │   ├── AuthService.ts    # Login/register/logout
+  │   ├── CanvasService.ts  # Save/load pizarras
+  │   └── types.ts          # API response types
+  ├── store/slices/
+  │   └── authSlice.ts      # Authentication state
+  ```
 
-- **Technical Accuracy**: Validar que los ejemplos de código funcionen.
-- **Clarity**: Revisar que las explicaciones sean claras para el público objetivo.
-- **Accessibility**: Asegurar que la documentación sea accesible para desarrolladores de diferentes niveles.
+#### **👩‍💻 Persona 2: AI Integration Specialist (4 horas)**
 
-## Testing Strategy
+**🤖 Tarea 2A: Gemini 2.5 Integration Core (2 horas)**
+- **Objetivo**: Implementar captura de canvas y envío a Gemini AI
+- **Archivos a Crear**:
+  ```
+  SL8WhiteboardExpo/src/
+  ├── services/
+  │   ├── AIService.ts      # Gemini API integration
+  │   ├── ScreenshotService.ts # Canvas to image conversion
+  │   └── HelpService.ts    # 6-level help system
+  ├── store/slices/
+  │   └── aiSlice.ts        # AI state (loading, responses, help level)
+  ├── components/
+  │   ├── AIHelpPanel.tsx   # UI para sistema de ayuda
+  │   └── HelpButton.tsx    # Botón de ayuda
+  ```
 
-### Documentation Testing
+**📱 Tarea 2B: Help System UI Implementation (2 horas)**
+- **Objetivo**: Implementar los 6 niveles de ayuda en la interfaz
+- **Niveles de Ayuda**:
+  1. "I am stuck" - Análisis general del problema
+  2. "I need a hint" - Pista específica sobre el siguiente paso
+  3. "Show me direction" - Indicación de dirección/enfoque
+  4. "Give me an example" - Ejemplo similar resuelto
+  5. "Break it down" - Descomposición paso a paso
+  6. "Show solution" - Solución completa
 
-1. **Link Validation**: Verificar que todos los enlaces internos y externos funcionen.
-2. **Code Example Testing**: Ejecutar todos los ejemplos de código para verificar su funcionamiento.
-3. **Consistency Checks**: Asegurar consistencia en terminología y formato.
-4. **User Testing**: Validar con desarrolladores nuevos que la documentación sea comprensible.
+#### **🎨 Persona 3: UI/UX Integration Lead (3 horas)**
 
-### Content Validation
+**🖥️ Tarea 3A: Session Management UI (1.5 horas)**
+- **Objetivo**: Interfaz para guardar/cargar pizarras (máximo 5 por usuario)
+- **Archivos a Crear**:
+  ```
+  SL8WhiteboardExpo/src/
+  ├── components/
+  │   ├── SessionManager.tsx    # Lista de pizarras guardadas
+  │   ├── SaveSessionModal.tsx  # Modal para guardar con título
+  │   ├── LoadSessionModal.tsx  # Modal para cargar pizarra
+  │   └── SessionCard.tsx       # Card component para cada sesión
+  ├── screens/
+  │   └── SessionsScreen.tsx    # Pantalla de gestión de sesiones
+  ```
 
-1. **Technical Review**: Revisión por parte del equipo técnico.
-2. **Stakeholder Review**: Validación con product managers y stakeholders.
-3. **Community Feedback**: Incorporar feedback de la comunidad de desarrolladores.
+**🔐 Tarea 3B: Authentication UI (1.5 horas)**
+- **Objetivo**: Pantallas de login/registro
+- **Archivos a Crear**:
+  ```
+  SL8WhiteboardExpo/src/
+  ├── screens/
+  │   ├── LoginScreen.tsx       # Pantalla de login
+  │   ├── RegisterScreen.tsx    # Pantalla de registro
+  │   └── ProfileScreen.tsx     # Perfil de usuario
+  ├── components/
+  │   ├── AuthForm.tsx          # Formulario reutilizable
+  │   └── UserAvatar.tsx        # Avatar del usuario
+  ├── navigation/
+  │   └── AuthNavigator.tsx     # Navegación de autenticación
+  ```
 
-### Maintenance Strategy
+#### **⚙️ Persona 4: Integration & Testing Coordinator (3 horas)**
 
-1. **Automated Updates**: Scripts para actualizar información de versiones y dependencias.
-2. **Regular Reviews**: Revisiones periódicas para mantener la documentación actualizada.
-3. **Change Tracking**: Sistema para rastrear cambios en el código que requieren actualización de documentación.
+**🔧 Tarea 4A: App Architecture Updates (1.5 horas)**
+- **Objetivo**: Integrar todas las nuevas funcionalidades en App.tsx
+- **Archivos a Modificar**:
+  ```
+  SL8WhiteboardExpo/
+  ├── App.tsx               # Main app con navegación
+  ├── src/navigation/
+  │   ├── AppNavigator.tsx  # Navegación principal
+  │   └── MainTabs.tsx      # Tabs principales
+  ├── src/components/
+  │   └── Toolbar.tsx       # Agregar botones AI y Save/Load
+  ```
 
-## Implementation Approach
+**🧪 Tarea 4B: End-to-End Testing & Integration (1.5 horas)**
+- **Objetivo**: Probar que todo funcione integrado
+- **Puntos de Prueba**:
+  - Login/registro funciona
+  - Save/load de pizarras (máximo 5)
+  - AI help system responde correctamente
+  - Canvas funciona con persistencia
+  - Estados de error manejados
 
-### Phase 1: Core Documentation
-- README.md (Resumen Ejecutivo)
-- ARCHITECTURE.md (Arquitectura básica)
-- INSTALLATION.md (Guía de instalación)
-
-### Phase 2: Technical Details
-- API.md (Documentación de API)
-- DEVELOPMENT.md (Guía de desarrollo)
-- Diagramas de arquitectura
-
-### Phase 3: Planning and Use Cases
-- ROADMAP.md (Roadmap de funcionalidades)
-- USE_CASES.md (Casos de uso)
-- TECHNICAL_DECISIONS.md (Decisiones técnicas)
-
-### Phase 4: Enhancement and Maintenance
-- Refinamiento basado en feedback
-- Automatización de actualizaciones
-- Integración con CI/CD para mantener sincronización
