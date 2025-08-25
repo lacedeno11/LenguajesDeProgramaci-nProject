@@ -14,8 +14,8 @@ class AuthService {
    */
   async login(email: string, password: string): Promise<AuthResponse> {
     try {
-      // Temporary GET method until POST is fixed by PERSONA 1
-      const response = await apiService.getWithParams<AuthResponse>('/get_auth.php', {
+      // TEMPORAL: Usar GET hasta que el backend POST funcione
+      const response = await apiService.getWithParams<{ user: User; token: string }>('/get_auth.php', {
         action: 'login',
         email,
         password
@@ -24,9 +24,19 @@ class AuthService {
       if (response.success && response.data?.token) {
         // Store the token securely
         await apiService.setAuthToken(response.data.token);
+        
+        return {
+          success: true,
+          message: response.message,
+          data: response.data
+        };
       }
 
-      return response;
+      return {
+        success: false,
+        message: response.message || 'Login failed',
+        error: response.error
+      };
     } catch (error: any) {
       return {
         success: false,
@@ -42,9 +52,8 @@ class AuthService {
    */
   async register(name: string, email: string, password: string): Promise<AuthResponse> {
     try {
-      // For now, use GET method similar to login
-      // TODO: Switch to POST /api/auth.php when PERSONA 1 fixes POST requests
-      const response = await apiService.getWithParams<AuthResponse>('/get_auth.php', {
+      // Use the correct POST endpoint that is working
+      const response = await apiService.post<{ user: User; token: string }>('/api/auth.php', {
         action: 'register',
         name,
         email,
@@ -54,9 +63,19 @@ class AuthService {
       if (response.success && response.data?.token) {
         // Store the token securely
         await apiService.setAuthToken(response.data.token);
+        
+        return {
+          success: true,
+          message: response.message,
+          data: response.data
+        };
       }
 
-      return response;
+      return {
+        success: false,
+        message: response.message || 'Registration failed',
+        error: response.error
+      };
     } catch (error: any) {
       return {
         success: false,

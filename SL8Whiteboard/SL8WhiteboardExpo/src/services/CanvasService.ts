@@ -31,14 +31,34 @@ class CanvasService {
    */
   async saveCanvas(title: string, canvasState: SerializedCanvasState): Promise<SessionResponse> {
     try {
+      console.log('🎨 CanvasService.saveCanvas called with:', { title, canvasState });
+      
+      // Check if user is authenticated
+      const token = await apiService.getAuthToken();
+      console.log('🔑 Auth token:', token ? '✅ Token exists' : '❌ No token found');
+      
+      if (!token) {
+        return {
+          success: false,
+          message: 'User not authenticated',
+          error: 'NO_AUTH_TOKEN'
+        };
+      }
+
       const request: SaveCanvasRequest = {
         title,
         canvas_data: JSON.stringify(canvasState)
       };
 
+      console.log('📤 Sending request to /api/sessions.php:', request);
+
       const response = await apiService.post<CanvasSession>('/api/sessions.php', request);
+      
+      console.log('📥 Response from backend:', response);
+      
       return response;
     } catch (error: any) {
+      console.error('❌ CanvasService.saveCanvas error:', error);
       return {
         success: false,
         message: 'Failed to save canvas',

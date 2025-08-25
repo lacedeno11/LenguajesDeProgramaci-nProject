@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { ApiResponse, ApiError } from '../types/api';
 
-const API_BASE_URL = 'http://localhost:8080/sl8-backend';
+const API_BASE_URL = 'http://localhost:8081';
 
 class ApiService {
   private api: AxiosInstance;

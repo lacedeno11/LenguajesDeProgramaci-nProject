@@ -46,6 +46,23 @@ const WhiteboardScreen: React.FC = () => {
 
   const handleSaveConfirm = async (title: string) => {
     try {
+      console.log('🚀 WhiteboardScreen.handleSaveConfirm called with title:', title);
+      console.log('🔐 Auth state check:', { 
+        isAuthenticated, 
+        user: user?.email,
+        userId: user?.id 
+      });
+
+      // Check authentication state before proceeding
+      if (!isAuthenticated || !user) {
+        Alert.alert(
+          'Error de Autenticación', 
+          'Debes estar autenticado para guardar sesiones. Por favor inicia sesión nuevamente.',
+          [{ text: 'OK' }]
+        );
+        return;
+      }
+
       // Prepare canvas state for serialization
       const serializedCanvasState: SerializedCanvasState = {
         strokes: Object.values(canvasState.strokes),
@@ -55,22 +72,29 @@ const WhiteboardScreen: React.FC = () => {
         images: Object.values(canvasState.imageElements),
       };
 
-      console.log('Saving session with title:', title);
-      console.log('Canvas state:', serializedCanvasState);
+      console.log('🎨 Serialized canvas state structure:', {
+        strokesCount: serializedCanvasState.strokes.length,
+        layersCount: serializedCanvasState.layers.length,
+        imagesCount: serializedCanvasState.images.length,
+        currentTool: serializedCanvasState.currentTool.type,
+        dataSize: JSON.stringify(serializedCanvasState).length
+      });
 
       // Dispatch save action
-      await dispatch(saveSessionAsync({ 
+      console.log('📤 Dispatching saveSessionAsync...');
+      const result = await dispatch(saveSessionAsync({ 
         title, 
         canvasState: serializedCanvasState 
       })).unwrap();
 
+      console.log('✅ Save successful:', result);
       setShowSaveModal(false);
       Alert.alert('Éxito', `Sesión "${title}" guardada correctamente`);
       
       // Reload sessions to update the list
       dispatch(loadSessionsAsync());
     } catch (error: any) {
-      console.error('Failed to save session:', error);
+      console.error('❌ Failed to save session:', error);
       Alert.alert(
         'Error al Guardar', 
         error.message || 'No se pudo guardar la sesión. Inténtalo de nuevo.',
