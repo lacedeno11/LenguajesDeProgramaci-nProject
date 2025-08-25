@@ -1,0 +1,57 @@
+<?php
+[
+'parts' => [
+['text' => $prompt]
+]
+];
+// sl8-backend/api/ai/hint.php
+
+
+// If screenshot present, include it as an inline image part (Gemini supports base64 inline images)
+if ($screenshot) {
+$requestBody['contents'][0]['parts'][] = ['image' => ['mime_type' => 'image/png', 'data' => $screenshot]];
+}
+
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+'Content-Type: application/json'
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
+$response = curl_exec($ch);
+$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+if (curl_errno($ch)) {
+error_log('cURL error: '.curl_error($ch));
+}
+curl_close($ch);
+
+
+if ($httpcode >= 400) {
+http_response_code(502);
+echo json_encode(['error' => 'AI provider error', 'details' => $response]);
+exit;
+}
+
+
+$result = json_decode($response, true);
+// Extract text from Gemini response structure (example dependent on API version)
+$hintText = '';
+if (isset($result['candidates'][0]['content'][0]['text'])) {
+$hintText = $result['candidates'][0]['content'][0]['text'];
+} else if (isset($result['text'])) {
+$hintText = $result['text'];
+}
+
+
+// Persist log into DB (pseudo)
+// saveAIHintLog($sessionId, $helpLevel, $context, $hintText, $result);
+
+
+// Response to client
+header('Content-Type: application/json');
+echo json_encode([
+'hint' => $hintText,
+'level' => $helpLevel,
+'sourceModel' => $model,
+]);

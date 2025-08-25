@@ -1,0 +1,43 @@
+// React Native + Expo example (TypeScript)
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
+import { captureRef } from 'react-native-view-shot';
+
+
+type HintRequest = {
+sessionId: string;
+helpLevel: number;
+screenshot?: string; // data URL
+context?: string;
+};
+
+
+export async function captureCanvasAndSend(viewRef: any, body: HintRequest) {
+// capture view as PNG
+const uri = await captureRef(viewRef, { format: 'png', quality: 0.8 });
+
+
+// resize/compress for performance
+const manipulated = await ImageManipulator.manipulateAsync(uri, [{ resize: { width: 1200 } }], { compress: 0.7, format: ImageManipulator.SaveFormat.PNG });
+
+
+const b64 = await FileSystem.readAsStringAsync(manipulated.uri, { encoding: FileSystem.EncodingType.Base64 });
+const dataUrl = `data:image/png;base64,${b64}`;
+
+
+const payload = {
+...body,
+screenshot: dataUrl,
+};
+
+
+const res = await fetch('https://api.sl8.ai/api/ai/hint', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload),
+});
+
+
+if (!res.ok) throw new Error('AI request failed');
+return await res.json();
+}
