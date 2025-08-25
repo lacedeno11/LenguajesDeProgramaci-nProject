@@ -11,7 +11,7 @@ class Database {
     private const DB_HOST = 'localhost';
     private const DB_NAME = 'sl8_whiteboard';
     private const DB_USER = 'root';
-    private const DB_PASS = '';
+    private const DB_PASS = 'Lookatm-e5';
     
     private function __construct() {
         try {
@@ -23,7 +23,7 @@ class Database {
             ]);
         } catch (PDOException $e) {
             error_log("Database connection failed: " . $e->getMessage());
-            throw new Exception("Database connection failed");
+            throw new Exception("Database connection failed" . $e->getMessage());
         }
     }
     

@@ -3,7 +3,56 @@
  * Controlador de Sesiones de Canvas - SL8.ai API
  * Maneja CRUD de pizarras con límite de 5 por usuario
  */
+require_once '../config/database.php';
+require_once '../middleware/auth.php';
+require_once '../utils/validator.php';
+require_once '../utils/response.php';
 
+$method = $_SERVER['REQUEST_METHOD'];
+$path = $_GET['action']||null;
+
+switch ($method) {
+    case 'GET':
+        if(isset($_GET['id'])){
+            try {
+                handleGetSession($_GET['id']);
+            } catch (Exception $e) {
+                ApiResponse::error("Invalid GET request", 400);
+            }
+            break;
+        }else{
+            try {
+                handleListSessions();
+            } catch (Exception $e) {
+                ApiResponse::error("Invalid GET request", 400);
+            }
+            break;
+        }
+    case 'POST':
+        try {
+            handleCreateSession();
+        } catch (Exception $e) {
+            ApiResponse::error("Invalid POST request", 400);
+        }
+        break;
+
+    case 'PUT':
+        if (isset($_GET['id'])) {
+            handleUpdateSession($_GET['id']);
+        } else {
+            ApiResponse::error("Invalid PUT request. ID must be provided", 402);
+        }
+        break;
+
+    case 'DELETE':
+        if (isset($_GET['id'])) {
+            handleDeleteSession($_GET['id']);
+        } else {
+            ApiResponse::error("Invalid DELETE request", 400);
+        }
+        break;
+
+}
 /**
  * Listar sesiones del usuario autenticado (máximo 5)
  */

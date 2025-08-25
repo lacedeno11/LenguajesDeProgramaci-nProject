@@ -3,6 +3,37 @@
  * Controlador de Autenticación - SL8.ai API
  * Maneja registro, login y logout de usuarios
  */
+// Allow requests from any origin (for development only)
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Handle preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+require_once '../config/database.php';
+require_once '../utils/validator.php';
+require_once '../utils/response.php';
+require_once '../middleware/auth.php';
+
+$action = $_GET['action'] ?? null;
+
+switch($action) {
+    case 'register':
+        handleRegister();
+        break;
+    case 'login':
+        handleLogin();
+        break;
+    case 'logout':
+        handleLogout();
+        break;
+    default:
+        ApiResponse::error("Invalid action", 400);
+}
 
 /**
  * Manejar registro de usuario
