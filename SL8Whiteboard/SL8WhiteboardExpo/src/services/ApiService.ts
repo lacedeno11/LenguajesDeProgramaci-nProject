@@ -122,6 +122,10 @@ class ApiService {
       console.error('Failed to clear auth token:', error);
     }
   }
+
+  getBaseUrl(): string {
+    return API_BASE_URL;
+  }
 }
 
 export const apiService = new ApiService();

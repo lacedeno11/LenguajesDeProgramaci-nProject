@@ -132,8 +132,6 @@ const WhiteboardScreen: React.FC = () => {
   const handleShowImageGallery = () => {
     setShowImageGallery(true);
   };
-
-  const handleSessionLoad = async (session: CanvasSession) => {
     try {
       console.log('Loading session:', session);
       
@@ -167,8 +165,6 @@ const WhiteboardScreen: React.FC = () => {
       <Toolbar
         onShowSessions={handleShowSessions}
         onSaveSession={handleSaveSession}
-        onSaveImage={handleSaveImage}
-        onShowImageGallery={handleShowImageGallery}
         userEmail={user?.email}
         sessionsCount={sessions.length}
         maxSessions={5}
@@ -187,17 +183,6 @@ const WhiteboardScreen: React.FC = () => {
             setShowSessionManager(false);
             handleSaveSession();
           }}
-        />
-      </Modal>
-
-      <Modal
-        visible={showImageGallery}
-        animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <ImageGallery
-          visible={showImageGallery}
-          onClose={() => setShowImageGallery(false)}
         />
       </Modal>
 

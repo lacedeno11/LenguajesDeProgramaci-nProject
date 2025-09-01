@@ -11,6 +11,8 @@ import CameraButton from './CameraButton';
 interface ToolbarProps {
   onShowSessions?: () => void;
   onSaveSession?: () => void;
+  onSaveImage?: () => void;
+  onShowImageGallery?: () => void;
   userEmail?: string;
   sessionsCount?: number;
   maxSessions?: number;
@@ -19,6 +21,8 @@ interface ToolbarProps {
 const Toolbar: React.FC<ToolbarProps> = ({
   onShowSessions,
   onSaveSession,
+  onSaveImage,
+  onShowImageGallery,
   userEmail,
   sessionsCount = 0,
   maxSessions = 5,
@@ -269,6 +273,27 @@ const Toolbar: React.FC<ToolbarProps> = ({
           />
         </View>
       </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Galería</Text>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity 
+            style={[styles.button, styles.saveImageButton]} 
+            onPress={onSaveImage}
+            disabled={!onSaveImage}
+          >
+            <Text style={styles.buttonText}>📸 Guardar Imagen</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.button, styles.galleryButton]} 
+            onPress={onShowImageGallery}
+            disabled={!onShowImageGallery}
+          >
+            <Text style={styles.buttonText}>🖼️ Ver Galería</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -366,6 +391,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#495057',
     fontWeight: '500',
+  },
+  saveImageButton: {
+    backgroundColor: '#20c997',
+  },
+  galleryButton: {
+    backgroundColor: '#fd7e14',
   },
 });
 
