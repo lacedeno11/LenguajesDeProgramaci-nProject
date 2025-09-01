@@ -89,16 +89,25 @@ class AuthService {
    * Logout user and clear stored token
    */
   async logout(): Promise<void> {
+    console.log('🔄 AuthService.logout() starting...');
+    
     try {
       // Call logout endpoint if available
       // await apiService.post('/api/auth.php', { action: 'logout' });
       
       // Clear local token
+      console.log('🗑️ Clearing auth token...');
       await apiService.clearAuthToken();
+      console.log('✅ Auth token cleared successfully');
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error('❌ Logout error:', error);
       // Still clear token even if server call fails
-      await apiService.clearAuthToken();
+      try {
+        await apiService.clearAuthToken();
+        console.log('🗑️ Auth token cleared after error');
+      } catch (clearError) {
+        console.error('❌ Failed to clear token:', clearError);
+      }
     }
   }
 

@@ -9,15 +9,22 @@ const RootNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAuthenticated, isLoading, initialized } = useAppSelector((state) => state.auth);
 
+  // Log state changes for debugging
+  useEffect(() => {
+    console.log('🗂️ RootNavigator state:', { isAuthenticated, isLoading, initialized });
+  }, [isAuthenticated, isLoading, initialized]);
+
   useEffect(() => {
     // Check if user has a valid token on app startup
     if (!initialized) {
+      console.log('🔍 Verifying token on startup...');
       dispatch(verifyTokenAsync());
     }
   }, [dispatch, initialized]);
 
   // Show loading screen while verifying token
   if (isLoading || !initialized) {
+    console.log('⏳ Showing loading screen...');
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
@@ -26,6 +33,7 @@ const RootNavigator: React.FC = () => {
   }
 
   // Show appropriate screen based on auth state
+  console.log(`📱 Showing ${isAuthenticated ? 'WhiteboardScreen' : 'AuthNavigator'}`);
   return isAuthenticated ? <WhiteboardScreen /> : <AuthNavigator />;
 };
 

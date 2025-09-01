@@ -3,7 +3,8 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Alert } from 'rea
 import { useAppDispatch, useAppSelector } from '../store';
 import { setZoom, resetView, clearCanvas } from '../store/slices/canvasSlice';
 import { setCurrentTool, setToolColor, setToolWidth } from '../store/slices/toolsSlice';
-import { logoutAsync } from '../store/slices/authSlice';
+import { logoutAsync, clearAuth } from '../store/slices/authSlice';
+import { authService } from '../services/AuthService';
 import { useHistory } from '../hooks/useHistory';
 import ImagePickerButton from './ImagePickerButton';
 import CameraButton from './CameraButton';
@@ -32,22 +33,39 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const toolsState = useAppSelector(state => state.tools);
   const { undo, redo, canUndo, canRedo } = useHistory();
 
-  const handleLogout = () => {
-    Alert.alert(
-      'Cerrar Sesión',
-      '¿Estás seguro de que quieres cerrar sesión?',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Cerrar Sesión',
-          style: 'destructive',
-          onPress: () => dispatch(logoutAsync()),
-        },
-      ]
-    );
+  const handleLogout = async () => {
+    console.log('🚪 Logout button clicked');
+    
+    // Use browser confirm instead of React Native Alert.alert for web compatibility
+    const confirmed = confirm('¿Estás seguro de que quieres cerrar sesión?');
+    
+    if (!confirmed) {
+      console.log('❌ Logout cancelled by user');
+      return;
+    }
+    
+    console.log('✅ Logout confirmed by user');
+    
+    try {
+      // Clear the token from storage first
+      console.log('🗑️ Clearing token from storage...');
+      await authService.logout();
+      console.log('✅ Token cleared from storage');
+      
+      // Clear the auth state in Redux
+      console.log('🔄 Clearing auth state from Redux...');
+      dispatch(clearAuth());
+      console.log('✅ Auth state cleared from Redux');
+      
+      // Show success message
+      alert('✅ Sesión cerrada exitosamente');
+      
+    } catch (error: any) {
+      console.error('❌ Error during logout:', error);
+      // Even if there's an error, clear the auth state
+      dispatch(clearAuth());
+      alert('⚠️ Sesión cerrada (con advertencias)');
+    }
   };
 
   const handleZoomIn = () => {
@@ -216,7 +234,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             style={[styles.button, styles.logoutButton]} 
             onPress={handleLogout}
           >
-            <Text style={styles.buttonText}>🚪 Salir</Text>
+            <Text style={styles.buttonText}>🚪 Cerrar Sesión</Text>
           </TouchableOpacity>
         </View>
       </View>

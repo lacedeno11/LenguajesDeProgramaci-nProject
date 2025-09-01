@@ -12,8 +12,16 @@
 - **Pizarra Digital**: Canvas interactivo con herramientas de dibujo
 - **Herramientas de Dibujo**: Pen, Pencil, Highlighter, Eraser, Text
 - **Gestión de Imágenes**: Importar desde galería y cámara
+- **🆕 Galería de Imágenes**: Sistema completo de captura y galería visual
 - **Guardado de Sesiones**: Sistema básico de guardado funcionando
 - **Backend API**: Endpoints PHP para auth y sesiones
+
+### 🖼️ **NUEVA FUNCIONALIDAD: Galería de Imágenes**
+- **📸 Captura del Canvas**: Guarda capturas automáticas de tu trabajo
+- **🗂️ Galería Visual**: Interfaz moderna para ver todas las imágenes
+- **📊 Metadata Completa**: Título, fecha y tamaño de cada imagen
+- **🔄 Actualización Automática**: Refresco dinámico de la galería
+- **💾 Almacenamiento Robusto**: Backend PHP con API REST
 
 ### 🔧 En Desarrollo
 - Persistencia completa en base de datos

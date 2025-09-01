@@ -37,9 +37,12 @@ export const logoutAsync = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
+      console.log('🔄 LogoutAsync thunk executing...');
       await authService.logout();
+      console.log('✅ AuthService.logout() completed successfully');
       return true;
     } catch (error: any) {
+      console.error('❌ LogoutAsync thunk failed:', error);
       return rejectWithValue(error.message || 'Logout failed');
     }
   }
@@ -99,10 +102,15 @@ const authSlice = createSlice({
     
     // Clear auth state (for logout)
     clearAuth: (state) => {
+      console.log('🗑️ clearAuth action called - clearing all auth state');
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;
+      state.isLoading = false;
+      // Keep initialized as true so we don't show loading screen after logout
+      state.initialized = true;
+      console.log('✅ Auth state cleared successfully');
     },
     
     // Update user info
@@ -158,9 +166,11 @@ const authSlice = createSlice({
     // Logout cases
     builder
       .addCase(logoutAsync.pending, (state) => {
+        console.log('🔄 Logout pending...');
         state.isLoading = true;
       })
       .addCase(logoutAsync.fulfilled, (state) => {
+        console.log('✅ Logout fulfilled - clearing auth state');
         state.isLoading = false;
         state.user = null;
         state.token = null;
@@ -168,6 +178,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(logoutAsync.rejected, (state, action) => {
+        console.log('❌ Logout rejected:', action.payload);
         state.isLoading = false;
         state.error = action.payload as string;
         // Still clear auth on logout failure
